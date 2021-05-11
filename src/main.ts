@@ -2,6 +2,8 @@ const appSelector = '.js-fetch-uu-circles-app' as const
 const REQUEST_URL = process.env.NODE_ENV || 'development' === 'development'
   ? 'http://localhost:8000'
   : 'https://uu-circles.com'
+const DATA_ATTRIBUTE_NAME = 'data-uu-circles'
+const DATA_ATTRIBUTE_COLUMN = 'data-column'
 
 export interface Circle {
   type: 'Circle'
@@ -67,20 +69,51 @@ export interface Circle {
 
 const handler = async () => {
   const appElms = document.querySelectorAll(appSelector)
+  const data = await fetchedUuCircles()
+  console.log(data)
 
   appElms.forEach((appElm) => {
-    console.log(appElm.getAttribute('data-uu-circles'))
+    if (appElm.getAttribute(DATA_ATTRIBUTE_NAME) === 'card') {
+      const parentDiv = document.createElement('div');
+      parentDiv.className = `grid grid-cols-${appElm.getAttribute(DATA_ATTRIBUTE_COLUMN)}`
+
+
+      for (let i = 0; i < 4; i++) {
+        const circle = data.data[i]
+
+        const childDiv = document.createElement('div');
+        const a = document.createElement('a');
+        a.href = `https://uu-circles.com/circle/${circle.slug}`
+
+        const image = document.createElement('img');
+        image.setAttribute('src', circle.handbillImageUrl);
+        image.setAttribute('alt', `${circle.name} UU-Circles`);
+        image.setAttribute('width', '300')
+        image.className = 'mx-auto'
+        a.insertAdjacentElement("beforeend", image)
+
+        // div > a > img
+        childDiv.insertAdjacentElement("beforeend", a)
+
+        const p = document.createElement('p');
+        p.textContent = circle.name
+        p.className = 'text-center'
+
+        // div > p
+        childDiv.insertAdjacentElement("beforeend", p)
+
+        parentDiv.insertAdjacentElement("beforeend", childDiv)
+      }
+
+      appElm.insertAdjacentElement('beforebegin', parentDiv)
+    }
   })
-
-  const data = await fetchedUuCircles()
-
-  console.log(data)
 }
 
 const fetchedUuCircles = async (): Promise<{
   data: Circle[]
 }> => {
-  const res =await fetch(`${REQUEST_URL}/api/main`)
+  const res = await fetch(`${REQUEST_URL}/api/main`)
 
   //レスポンスのボディーからJSONデータを取得
   return res.json() as Promise<{

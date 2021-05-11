@@ -61,19 +61,45 @@ var appSelector = '.js-fetch-uu-circles-app';
 var REQUEST_URL =  true
     ? 'http://localhost:8000'
     : 0;
+var DATA_ATTRIBUTE_NAME = 'data-uu-circles';
+var DATA_ATTRIBUTE_COLUMN = 'data-column';
 var handler = function () { return __awaiter(void 0, void 0, void 0, function () {
     var appElms, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 appElms = document.querySelectorAll(appSelector);
-                appElms.forEach(function (appElm) {
-                    console.log(appElm.getAttribute('data-uu-circles'));
-                });
                 return [4 /*yield*/, fetchedUuCircles()];
             case 1:
                 data = _a.sent();
                 console.log(data);
+                appElms.forEach(function (appElm) {
+                    if (appElm.getAttribute(DATA_ATTRIBUTE_NAME) === 'card') {
+                        var parentDiv = document.createElement('div');
+                        parentDiv.className = "grid grid-cols-" + appElm.getAttribute(DATA_ATTRIBUTE_COLUMN);
+                        for (var i = 0; i < 4; i++) {
+                            var circle = data.data[i];
+                            var childDiv = document.createElement('div');
+                            var a = document.createElement('a');
+                            a.href = "https://uu-circles.com/circle/" + circle.slug;
+                            var image = document.createElement('img');
+                            image.setAttribute('src', circle.handbillImageUrl);
+                            image.setAttribute('alt', circle.name + " UU-Circles");
+                            image.setAttribute('width', '300');
+                            image.className = 'mx-auto';
+                            a.insertAdjacentElement("beforeend", image);
+                            // div > a > img
+                            childDiv.insertAdjacentElement("beforeend", a);
+                            var p = document.createElement('p');
+                            p.textContent = circle.name;
+                            p.className = 'text-center';
+                            // div > p
+                            childDiv.insertAdjacentElement("beforeend", p);
+                            parentDiv.insertAdjacentElement("beforeend", childDiv);
+                        }
+                        appElm.insertAdjacentElement('beforebegin', parentDiv);
+                    }
+                });
                 return [2 /*return*/];
         }
     });
