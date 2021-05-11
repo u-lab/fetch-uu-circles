@@ -1,0 +1,19 @@
+{
+  "name": "fetch-uu-circles",
+  "version": "1.0.0",
+  "description": "UU-Circlesのコンテンツを取得し、画面上に表示する",
+  "scripts": {
+    "build": "cross-env NODE_ENV=development webpack",
+    "watch": "cross-env NODE_ENV=development webpack -w",
+    "release": "cross-env NODE_ENV=production webpack"
+  },
+  "author": "H37kouya",
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "ts-loader": "^9.1.2",
+    "typescript": "^4.2.4",
+    "webpack": "^5.37.0",
+    "webpack-cli": "^4.7.0"
+  }
+}
