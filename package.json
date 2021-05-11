@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "UU-Circlesのコンテンツを取得し、画面上に表示する",
   "scripts": {
-    "dev": "npm run watch & http-server ./public -p 4000",
+    "dev": "npm run watch & http-server ./public -p 3000",
     "build": "cross-env NODE_ENV=development webpack",
     "watch": "cross-env NODE_ENV=development webpack -w",
     "release": "cross-env NODE_ENV=production webpack"
