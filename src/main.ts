@@ -4,7 +4,7 @@ const appSelector = '.js-fetch-uu-circles-app' as const
 // リクエストURL
 const REQUEST_URL = (process.env.NODE_ENV || 'development') === 'development'
   ? 'http://localhost:8000'
-  : 'https://uu-circles.com'
+  : 'https://api.uu-circles.com'
 
 // data-attribute の値
 const DATA_ATTRIBUTE_NAME = 'data-uu-circles'
