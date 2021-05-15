@@ -57,12 +57,20 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+// Selector
 var appSelector = '.js-fetch-uu-circles-app';
+// リクエストURL
 var REQUEST_URL =  true
     ? 'http://localhost:8000'
     : 0;
+// data-attribute の値
 var DATA_ATTRIBUTE_NAME = 'data-uu-circles';
 var DATA_ATTRIBUTE_COLUMN = 'data-column';
+var DATA_ATTRIBUTE_TYPE = {
+    card: 'card'
+};
+// クラス名
+var CLASS_NAME_PREFIX = 'fetchUuCircles__card';
 var handler = function () { return __awaiter(void 0, void 0, void 0, function () {
     var appElms, data;
     return __generator(this, function (_a) {
@@ -72,27 +80,34 @@ var handler = function () { return __awaiter(void 0, void 0, void 0, function ()
                 return [4 /*yield*/, fetchedUuCircles()];
             case 1:
                 data = _a.sent();
-                console.log(data);
                 appElms.forEach(function (appElm) {
-                    if (appElm.getAttribute(DATA_ATTRIBUTE_NAME) === 'card') {
+                    // カード型であるかを確認
+                    if (appElm.getAttribute(DATA_ATTRIBUTE_NAME) === DATA_ATTRIBUTE_TYPE.card) {
+                        var column = appElm.getAttribute(DATA_ATTRIBUTE_COLUMN);
+                        // DATA_ATTRIBUTE_COLUMNが 1 or 2 でない場合は処理終了
+                        if (!['1', '2'].includes(column)) {
+                            return;
+                        }
                         var parentDiv = document.createElement('div');
-                        parentDiv.className = "grid grid-cols-" + appElm.getAttribute(DATA_ATTRIBUTE_COLUMN);
+                        parentDiv.className = CLASS_NAME_PREFIX + "__circle-container " + CLASS_NAME_PREFIX + "__grid-cols-" + column;
                         for (var i = 0; i < 4; i++) {
                             var circle = data.data[i];
                             var childDiv = document.createElement('div');
+                            childDiv.className = CLASS_NAME_PREFIX + "__circle-wrapper";
                             var a = document.createElement('a');
+                            a.className = CLASS_NAME_PREFIX + "__circle-handbill-anchor";
                             a.href = "https://uu-circles.com/circle/" + circle.slug;
                             var image = document.createElement('img');
                             image.setAttribute('src', circle.handbillImageUrl);
                             image.setAttribute('alt', circle.name + " UU-Circles");
                             image.setAttribute('width', '300');
-                            image.className = 'mx-auto';
+                            image.className = CLASS_NAME_PREFIX + "__circle-handbill-image";
                             a.insertAdjacentElement("beforeend", image);
                             // div > a > img
                             childDiv.insertAdjacentElement("beforeend", a);
                             var p = document.createElement('p');
                             p.textContent = circle.name;
-                            p.className = 'text-center';
+                            p.className = CLASS_NAME_PREFIX + "__circle-name";
                             // div > p
                             childDiv.insertAdjacentElement("beforeend", p);
                             parentDiv.insertAdjacentElement("beforeend", childDiv);

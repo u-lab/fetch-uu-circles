@@ -1,0 +1,26 @@
+.fetchUuCircles__card__circle-container {
+  display: grid;
+  gap: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.fetchUuCircles__card__grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0,1fr));
+}
+
+.fetchUuCircles__card__grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0,1fr));
+}
+
+/* .fetchUuCircles__card__circle-wrapper {} */
+
+.fetchUuCircles__card__circle-handbill-image {
+  border-radius: 0.25rem /* 4px */;
+}
+
+.fetchUuCircles__card__circle-name {
+  color: rgba(86, 86, 86, 1);
+  font-size: 0.875rem;
+  padding-top: 0.25rem /** 4px */;
+  text-align: center;
+}

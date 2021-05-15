@@ -1,9 +1,21 @@
+// Selector
 const appSelector = '.js-fetch-uu-circles-app' as const
-const REQUEST_URL = process.env.NODE_ENV || 'development' === 'development'
+
+// リクエストURL
+const REQUEST_URL = (process.env.NODE_ENV || 'development') === 'development'
   ? 'http://localhost:8000'
   : 'https://uu-circles.com'
+
+// data-attribute の値
 const DATA_ATTRIBUTE_NAME = 'data-uu-circles'
 const DATA_ATTRIBUTE_COLUMN = 'data-column'
+
+const DATA_ATTRIBUTE_TYPE = {
+  card: 'card'
+} as const
+
+// クラス名
+const CLASS_NAME_PREFIX = 'fetchUuCircles__card'
 
 export interface Circle {
   type: 'Circle'
@@ -70,26 +82,35 @@ export interface Circle {
 const handler = async () => {
   const appElms = document.querySelectorAll(appSelector)
   const data = await fetchedUuCircles()
-  console.log(data)
 
   appElms.forEach((appElm) => {
-    if (appElm.getAttribute(DATA_ATTRIBUTE_NAME) === 'card') {
-      const parentDiv = document.createElement('div');
-      parentDiv.className = `grid grid-cols-${appElm.getAttribute(DATA_ATTRIBUTE_COLUMN)}`
+    // カード型であるかを確認
+    if (appElm.getAttribute(DATA_ATTRIBUTE_NAME) === DATA_ATTRIBUTE_TYPE.card) {
+      const column = appElm.getAttribute(DATA_ATTRIBUTE_COLUMN)
 
+      // DATA_ATTRIBUTE_COLUMNが 1 or 2 でない場合は処理終了
+      if (!['1', '2'].includes(column)) {
+        return
+      }
+
+      const parentDiv = document.createElement('div');
+      parentDiv.className = `${CLASS_NAME_PREFIX}__circle-container ${CLASS_NAME_PREFIX}__grid-cols-${column}`
 
       for (let i = 0; i < 4; i++) {
         const circle = data.data[i]
 
         const childDiv = document.createElement('div');
+        childDiv.className = `${CLASS_NAME_PREFIX}__circle-wrapper`
+
         const a = document.createElement('a');
+        a.className = `${CLASS_NAME_PREFIX}__circle-handbill-anchor`
         a.href = `https://uu-circles.com/circle/${circle.slug}`
 
         const image = document.createElement('img');
         image.setAttribute('src', circle.handbillImageUrl);
         image.setAttribute('alt', `${circle.name} UU-Circles`);
         image.setAttribute('width', '300')
-        image.className = 'mx-auto'
+        image.className = `${CLASS_NAME_PREFIX}__circle-handbill-image`
         a.insertAdjacentElement("beforeend", image)
 
         // div > a > img
@@ -97,7 +118,7 @@ const handler = async () => {
 
         const p = document.createElement('p');
         p.textContent = circle.name
-        p.className = 'text-center'
+        p.className = `${CLASS_NAME_PREFIX}__circle-name`
 
         // div > p
         childDiv.insertAdjacentElement("beforeend", p)
